@@ -5,7 +5,6 @@ function init() {
     const headerBtn = document.querySelector('.header-menu');
     const sideMenu = document.querySelector('.side-menu');
     const burger = document.querySelector('.btn-burger');
-    const headerDisc = document.querySelector('.header-description');
     const indicatorWrap = document.querySelector('.indicator-wrap');
     const arrowUp = document.querySelector('.up');
     const detail = document.querySelectorAll('.detail');
@@ -13,9 +12,11 @@ function init() {
     const formInput = document.querySelector('.form-input');
     const form = document.querySelector('.form');
     const formTextArea = document.querySelector('.form-textarea');
-    const formBtn = document.querySelector('.form-btn')
+    const formBtn = document.querySelector('.form-btn');
+    const errorEmail = document.querySelector('.email-error');
+    const errorText = document.querySelector('.text-error');
 
-    const scrollBy = (clickItem, scrollItem) => {
+    const scrollByDetail = (clickItem, scrollItem) => {
         const topOffset = clickItem.offsetTop;
         const elementPosition = scrollItem.offsetTop;
         const offsetPosition = elementPosition - topOffset -70;
@@ -23,26 +24,10 @@ function init() {
             top: offsetPosition,
             behavior: 'smooth'
         });
+
     };
 
-    function validateEmail(email) {
-        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(String(email).toLowerCase());
-    };
-
-
-    heroItem.forEach((item, index) => {
-        item.addEventListener('click', () => {
-            detail.forEach(item => {
-            item.classList.remove('detail-visible');
-            });
-            detail[index].classList.add('detail-visible');
-            scrollBy(item, detail[index]);
-        });
-    });
-
-    window.addEventListener('scroll', () => {
-
+    const positionWindow = () => {
         if(pageYOffset > 0) {
             const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -61,7 +46,31 @@ function init() {
                 item.classList.remove('detail-visible');
                 });
         }
+    }
+
+    const logoPosition = () => {
+        indicatorWrap.style.left = logo.getBoundingClientRect().x+41+'px'
+    };
+
+    logoPosition();
+
+    function validateEmail(email) {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    };
+
+    heroItem.forEach((item, index) => {
+        item.addEventListener('click', () => {
+            detail.forEach(item => {
+            item.classList.remove('detail-visible');
+            });
+            detail[index].classList.add('detail-visible');
+            scrollByDetail(item, detail[index]);
+        });
     });
+
+    positionWindow()
+    window.addEventListener('scroll', positionWindow);
 
     headerBtn.addEventListener('click', () => {
         sideMenu.classList.toggle('active');
@@ -75,35 +84,34 @@ function init() {
 
     sideMenu.addEventListener('click', closeMenu);
 
-    const logoPosition = () => {
-        indicatorWrap.style.left = headerDisc.getBoundingClientRect().x - 55 + 'px'
-    }
 
-    logoPosition();
 
     window.addEventListener('resize', logoPosition);
 
-    const validForm = (valid, item) => {
+    const validForm = (valid, item, errorItem, message) => {
         if (valid) {
             item.classList.add('valid');
             item.classList.remove('invalid');
+            errorItem.textContent = '';
         } else {
             item.classList.add('invalid');
             item.classList.remove('valid');
+            errorItem.textContent = message;
         }
     }
     
     form.addEventListener('input', (e) => {
+        e.preventDefault();
         const validEmail = validateEmail(formInput.value.trim());
         const validText = formTextArea.value.length > 0;
         formBtn.classList.add('disabled');
-        validForm(validEmail, formInput);
-        validForm(validText, formTextArea);
+        validForm(validEmail, formInput, errorEmail, 'Введите корректный Email');
+        validForm(validText, formTextArea, errorText, 'Поле не должно быть пустым');
         if (validEmail && validText) {
             formBtn.disabled = false;
             formBtn.classList.remove('disabled');
         } 
-    })
+    });
 }
 
 window.onload = () => (init());
