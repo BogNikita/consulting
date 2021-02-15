@@ -46,18 +46,14 @@
     display: block;
     font-size: 1.5rem;
     margin-left: 10px;
+    transform: translateX(-96px);
 }
 
-.header-wrapper a {
-    position: relative;
-}
 
 .header-logo {
     display: block;
     height: 110px;
-    position: absolute;
-    top: 50px;
-    left: -42px;
+    transform: translate(-95.5px, 25px);
 }
 
 .header-nav li {
@@ -162,16 +158,14 @@
 .hero-content-item {
     font-size: 1.7rem;
     border-bottom: 1px solid #7695a9;
-}
-
-.hero-content-item a {
     display: block;
     color: #fff;
     padding-bottom: 10px;
     padding-top: 10px;
+    cursor: pointer;
 }
 
-.hero-content-item a:hover {
+.hero-content-item:hover {
     color: #FF530A;
     transition: color .3s ease-in;
 }
@@ -342,13 +336,14 @@
 .form {
     width: 530px;
     margin-left: 4rem;
+    position: relative;
 }
 
 .form-input {
     display: block;
     width: 100%;
     height: 40px;
-    margin-bottom: 1.125rem;
+    margin-bottom: 2rem;
 }
 
 .form-textarea {
@@ -388,6 +383,20 @@
     
 }
 
+.email-error {
+    position: absolute;
+    top: -20px;
+    right: 0;
+    color: red
+}
+
+.text-error {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    color: red
+}
+
 .header-scroll {
     height: 100px;
 }
@@ -395,7 +404,7 @@
 .logo-scroll {
     height: 100px;
     opacity: .4;
-    top: 0;
+    transform: translate(-95.5px, 0);
 }
 
 .indicator-wrap {
@@ -504,6 +513,10 @@
     
     .header-logo {
         display: none;
+    }
+
+    .header-description {
+        transform: translateX(0);
     }
 
     .indicator {
